@@ -2196,6 +2196,18 @@ def noteFromElement(elem, slurBundle=None):
     theDuration = makeDuration(theDuration, int(elem.get('dots', 0)))
     theNote.duration = theDuration
 
+    # save the information where a phrase starts or ends
+    phrase = elem.get('type')
+    if phrase is not None and phrase == "phraseStop":
+        theNote.phraseStop = 1
+        theNote.phraseStart = 0
+    elif phrase is not None and phrase == "phraseStart":
+        theNote.phraseStop = 0
+        theNote.phraseStart = 1
+    else:
+        theNote.phraseStop = 0
+        theNote.phraseStart = 0
+
     # iterate all immediate children
     dotElements = 0  # count the number of <dot> elements
     for subElement in _processEmbeddedElements(elem.findall('*'),
