@@ -2314,6 +2314,18 @@ def restFromElement(elem, slurBundle=None):  # pylint: disable=unused-argument
     theDuration = makeDuration(theDuration, int(elem.get('dots', 0)))
     theRest = note.Rest(duration=theDuration)
 
+    # save the information where a phrase starts or ends
+    phrase = elem.get('type')
+    if phrase is not None and phrase == "phraseStop":
+        theRest.phraseStop = 1
+        theRest.phraseStart = 0
+    elif phrase is not None and phrase == "phraseStart":
+        theRest.phraseStop = 0
+        theRest.phraseStart = 1
+    else:
+        theRest.phraseStop = 0
+        theRest.phraseStart = 0
+        
     if elem.get(_XMLID) is not None:
         theRest.id = elem.get(_XMLID)
 
